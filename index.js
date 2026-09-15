@@ -7,6 +7,8 @@ app.use(cors());
 
 app.use(express.json());
 
+var users = [];
+
 app.get("/test", (req, res) => {
 
     res.json({message: "hello world"})
@@ -14,25 +16,18 @@ app.get("/test", (req, res) => {
 });
 
 // callback a function inside a function
-app.get("/", (req, res) =>{
-    // body of the callback
-
-    res.json(dummyUsers());
+app.get("/users", (req, res) =>{
+    res.json(users);
 });
 
-const dummyUsers = () => {
-    const users = [];
-
-    for(let i = 0; i < 10000; i++)
-    {
-        users.push({
-            id: i,
-            name: `name ${i}`
-        });
-    }
-
-    return users;
-}
+app.post("/createUser", (req, res) => {
+    const {firstName, lastName} = req.body;
+    users.push({
+        firstName,
+        lastName
+    });
+    res.json({message: "user created"})
+})
 
 const PORT = 3000;
 
