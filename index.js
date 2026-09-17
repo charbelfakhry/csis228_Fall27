@@ -15,6 +15,10 @@ app.get("/test", (req, res) => {
     
 });
 
+app.get("/hello", (req, res) =>{
+    res.json({message: "hello"})
+})
+
 // callback a function inside a function
 app.get("/users", (req, res) =>{
     res.json(users);
