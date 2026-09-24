@@ -13,7 +13,7 @@ const createUser = (user) =>{
 }
 
 const updateUser = (id, user) =>{
-    return userRepository.create(id, user);
+    return userRepository.update(id, user);
 }
 
 const deleteUser = (id) =>{

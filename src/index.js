@@ -18,10 +18,14 @@ app.get("/", (req, res) => {
     res.send("API is running on localhost");
 })
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+app.listen(PORT, (error) => {
+    if(error){
+        console.error("Failed to start server:", error.message);
+        process.exit(1);
+    }
+
     console.log(`Server is running on ${PORT}`);
 })
-
 

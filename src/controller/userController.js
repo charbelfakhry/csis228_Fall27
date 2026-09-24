@@ -36,13 +36,17 @@ const updateUser = async(req, res) =>{
     const id = req.params.id;
     const {firstName, lastName, dob} = req.body;
 
-    if(!id || !firstName || !lastName){
+    if(!id || !firstName || !lastName || !dob){
         return res.status(400).json({
             message: "Missing data"
         });
     }
 
     const user = await userService.updateUser(id, {firstName, lastName, dob})
+
+    if(!user){
+        return res.status(404).json({message: `User ${id} does not exist`})
+    }
 
     res.status(200).json(user);
 }
