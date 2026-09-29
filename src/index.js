@@ -1,5 +1,6 @@
 const express = require("express");
 const userRoutes = require("./route/user.route");
+const productRoutes = require("./route/product.route");
 const cors = require("cors");
 
 require("dotenv").config();
@@ -13,6 +14,7 @@ app.use(express.json());
 
 
 app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
 
 app.get("/", (req, res) => {
     res.send("API is running on localhost");
