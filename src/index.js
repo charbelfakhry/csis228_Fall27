@@ -4,6 +4,7 @@ const productRoutes = require("./route/product.route");
 const cors = require("cors");
 
 require("dotenv").config();
+const {notFoundHandler, errorHandler} = require("./middleware/errorHandler");
 
 const app = express();
 
@@ -19,6 +20,10 @@ app.use("/api/products", productRoutes);
 app.get("/", (req, res) => {
     res.send("API is running on localhost");
 })
+
+// must be registered after all routes
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
