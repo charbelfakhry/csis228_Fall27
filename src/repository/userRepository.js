@@ -1,48 +1,25 @@
-const pool = require("../config/db");
+const User = require("../models/User");
 
-// alias columns so the API speaks camelCase and dob stays a plain YYYY-MM-DD string
-const COLUMNS = `
-    user_id AS id,
-    user_first_name AS "firstName",
-    user_last_name AS "lastName",
-    user_dob::text AS dob`;
-
-const getAll = async () => {
-    const result = await pool.query(`SELECT ${COLUMNS} FROM users ORDER BY user_id`);
-    return result.rows;
+const getAll = () => {
+    return User.findAll({order: [["id", "ASC"]]});
 }
 
-const getById = async (id) => {
-    const result = await pool.query(`SELECT ${COLUMNS} FROM users WHERE user_id = $1`, [id]);
-    return result.rows[0];
+const getById = (id) => {
+    return User.findByPk(id);
 }
 
-const create = async (user) => {
-    const {firstName, lastName, dob} = user;
-    const result = await pool.query(
-        `INSERT INTO users (user_first_name, user_last_name, user_dob)
-         VALUES ($1, $2, $3)
-         RETURNING ${COLUMNS}`,
-        [firstName, lastName, dob]);
-    return result.rows[0];
+const create = (user) => {
+    return User.create(user);
 }
 
 const update = async (id, user) => {
-    const {firstName, lastName, dob} = user;
-    const result = await pool.query(
-        `UPDATE users SET
-            user_first_name = $1,
-            user_last_name = $2,
-            user_dob = $3
-         WHERE user_id = $4
-         RETURNING ${COLUMNS}`,
-        [firstName, lastName, dob, id]);
-    return result.rows[0];
+    const [count, rows] = await User.update(user, {where: {id}, returning: true});
+    return count > 0 ? rows[0] : null;
 }
 
 const remove = async (id) => {
-    const result = await pool.query("DELETE FROM users WHERE user_id = $1", [id]);
-    return result.rowCount > 0;
+    const count = await User.destroy({where: {id}});
+    return count > 0;
 }
 
 module.exports = {

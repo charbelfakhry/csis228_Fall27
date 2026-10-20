@@ -1,17 +1,11 @@
-const {Pool} = require("pg");
+const {Sequelize} = require("sequelize");
 
 // env vars are loaded by dotenv in src/index.js before this file is required
-const pool = new Pool({
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    dialect: "postgres",
+    logging: false // set to console.log to see the SQL Sequelize generates
 });
 
-// fires for errors on idle clients; without a listener they would crash the process
-pool.on("error", (error) => {
-    console.error("PostgreSQL error:", error);
-});
-
-module.exports = pool;
+module.exports = sequelize;

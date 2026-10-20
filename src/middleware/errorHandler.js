@@ -25,12 +25,15 @@ const normalizeError = (err) =>{
         return new AppError("Request body too large", 413, "PAYLOAD_TOO_LARGE");
     }
 
-    if(PG_ERRORS[err.code]){
-        const [statusCode, code, message] = PG_ERRORS[err.code];
-        return new AppError(message, statusCode, code, err.detail);
+    // Sequelize wraps the original pg error in err.parent
+    const dbError = err.parent ?? err;
+
+    if(PG_ERRORS[dbError.code]){
+        const [statusCode, code, message] = PG_ERRORS[dbError.code];
+        return new AppError(message, statusCode, code, dbError.detail);
     }
 
-    if(DB_UNAVAILABLE.includes(err.code)){
+    if(DB_UNAVAILABLE.includes(dbError.code)){
         return new AppError("Database unavailable", 503, "DB_UNAVAILABLE");
     }
 
