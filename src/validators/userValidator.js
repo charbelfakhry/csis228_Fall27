@@ -1,8 +1,5 @@
-const {body, param} = require("express-validator");
-
-const idRule = param("id")
-    .isInt({min: 1}).withMessage("id must be a positive integer")
-    .toInt();
+const {body} = require("express-validator");
+const {idRule} = require("./common");
 
 const nameRule = (field) =>
     body(field)
@@ -20,14 +17,14 @@ const userBodyRules = [
         .custom((value) => new Date(value) < new Date()).withMessage("dob must be in the past")
 ];
 
-const getUser = [idRule];
-const createUser = [...userBodyRules];
-const updateUser = [idRule, ...userBodyRules];
-const deleteUser = [idRule];
+const getById = [idRule];
+const create = [...userBodyRules];
+const update = [idRule, ...userBodyRules];
+const remove = [idRule];
 
 module.exports = {
-    getUser,
-    createUser,
-    updateUser,
-    deleteUser
+    getById,
+    create,
+    update,
+    remove
 }

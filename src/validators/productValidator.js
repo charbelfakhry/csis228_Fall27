@@ -1,8 +1,5 @@
-const {body, param} = require("express-validator");
-
-const idRule = param("id")
-    .isInt({min: 1}).withMessage("id must be a positive integer")
-    .toInt();
+const {body} = require("express-validator");
+const {idRule} = require("./common");
 
 const productBodyRules = [
     body("name")
@@ -10,8 +7,9 @@ const productBodyRules = [
         .isString().withMessage("name must be a string")
         .trim()
         .isLength({min: 2, max: 100}).withMessage("name must be between 2 and 100 characters"),
+    // product_desc is nullable in the database, so description is optional
     body("description")
-        .exists({values: "falsy"}).withMessage("description is required")
+        .optional({values: "null"})
         .isString().withMessage("description must be a string")
         .trim()
         .isLength({max: 500}).withMessage("description must be at most 500 characters"),

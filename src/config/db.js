@@ -1,6 +1,6 @@
 const {Pool} = require("pg");
-require("dotenv").config();
 
+// env vars are loaded by dotenv in src/index.js before this file is required
 const pool = new Pool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -9,12 +9,9 @@ const pool = new Pool({
     database: process.env.DB_NAME
 });
 
-pool.on("connect", ()=>{
-    console.log(`Connected to postgres database: ${process.env.DB_NAME}` )
-});
-
-pool.on("error", (error)=>{
-    console.error("PostgreSQL erorr: ", error);
+// fires for errors on idle clients; without a listener they would crash the process
+pool.on("error", (error) => {
+    console.error("PostgreSQL error:", error);
 });
 
 module.exports = pool;

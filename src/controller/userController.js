@@ -1,79 +1,38 @@
 const userService = require("../service/userService");
 
+// Express 5 forwards rejected promises to the error handler, so no try/catch is needed here
 
-const getUsers = async(req, res, next) =>{
-    try{
-        const users = await userService.getAllUsers();
-        res.status(200).json(users);
-    }catch(error){
-        next(error);
-    }
+const getAll = async (req, res) => {
+    const users = await userService.getAll();
+    res.status(200).json(users);
 }
 
-const getUser = async(req, res, next) =>{
-    try{
-        const id = req.params.id
-
-        const user = await userService.getUserById(id);
-
-        if(!user){
-            return res.status(404).json({message: `User ${id} does not exist`})
-        }
-
-        res.status(200).json(user);
-    }catch(error){
-        next(error);
-    }
+const getById = async (req, res) => {
+    const user = await userService.getById(req.params.id);
+    res.status(200).json(user);
 }
 
-const createUser = async (req, res, next) =>{
-    try{
-        const {firstName, lastName, dob} = req.body;
-
-        const user = await userService.createUser({firstName, lastName, dob});
-
-        res.status(201).json(user);
-    }catch(error){
-        next(error);
-    }
+const create = async (req, res) => {
+    const {firstName, lastName, dob} = req.body;
+    const user = await userService.create({firstName, lastName, dob});
+    res.status(201).json(user);
 }
 
-const updateUser = async(req, res, next) =>{
-    try{
-        const id = req.params.id;
-        const {firstName, lastName, dob} = req.body;
-
-        const user = await userService.updateUser(id, {firstName, lastName, dob})
-
-        if(!user){
-            return res.status(404).json({message: `User ${id} does not exist`})
-        }
-
-        res.status(200).json(user);
-    }catch(error){
-        next(error);
-    }
+const update = async (req, res) => {
+    const {firstName, lastName, dob} = req.body;
+    const user = await userService.update(req.params.id, {firstName, lastName, dob});
+    res.status(200).json(user);
 }
 
-const deleteUser = async(req, res, next) => {
-    try{
-        const id = req.params.id;
-
-        const deleted = await userService.deleteUser(id);
-        if(!deleted){
-            return res.status(404).json("User not found");
-        }
-
-        res.status(200).json({message: "User deleted Successfully!"});
-    }catch(error){
-        next(error);
-    }
+const remove = async (req, res) => {
+    await userService.remove(req.params.id);
+    res.status(204).end();
 }
 
 module.exports = {
-    getUsers,
-    getUser,
-    createUser,
-    updateUser,
-    deleteUser
+    getAll,
+    getById,
+    create,
+    update,
+    remove
 }

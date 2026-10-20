@@ -1,53 +1,32 @@
 const productService = require("../service/productService");
 
-const getAll = async (req, res, next) =>{
-    try{
-        const products = await productService.getAll();
-        res.status(200).json(products);
-    }catch(error){
-        next(error);
-    }
+// Express 5 forwards rejected promises to the error handler, so no try/catch is needed here
+
+const getAll = async (req, res) => {
+    const products = await productService.getAll();
+    res.status(200).json(products);
 }
 
-const getById = async (req, res, next) => {
-    try{
-        const id = req.params.id;
-        const product = await productService.getById(id);
-        res.status(200).json(product);
-    }catch(error){
-        next(error);
-    }
+const getById = async (req, res) => {
+    const product = await productService.getById(req.params.id);
+    res.status(200).json(product);
 }
 
-const create = async (req, res, next) =>{
-    try{
-        const {name, description, quantity} = req.body;
-        const result = await productService.create({name, description, quantity});
-        res.status(201).json(result);
-    }catch(error){
-        next(error);
-    }
+const create = async (req, res) => {
+    const {name, description, quantity} = req.body;
+    const product = await productService.create({name, description, quantity});
+    res.status(201).json(product);
 }
 
-const update = async (req, res, next) =>{
-    try{
-        const id = req.params.id;
-        const {name, description, quantity} = req.body;
-        const result = await productService.update(id, {name, description, quantity});
-        res.status(200).json(result);
-    }catch(error){
-        next(error);
-    }
+const update = async (req, res) => {
+    const {name, description, quantity} = req.body;
+    const product = await productService.update(req.params.id, {name, description, quantity});
+    res.status(200).json(product);
 }
 
-const remove = async (req, res, next) =>{
-    try{
-        const id = req.params.id;
-        const deleted = await productService.remove(id);
-        res.status(200).json(deleted);
-    }catch(error){
-        next(error);
-    }
+const remove = async (req, res) => {
+    await productService.remove(req.params.id);
+    res.status(204).end();
 }
 
 module.exports = {
