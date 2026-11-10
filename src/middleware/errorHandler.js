@@ -25,6 +25,11 @@ const normalizeError = (err) =>{
         return new AppError("Request body too large", 413, "PAYLOAD_TOO_LARGE");
     }
 
+    // any other client error raised by express.json() (e.g. unsupported charset or encoding)
+    if(err.expose && err.status >= 400 && err.status < 500){
+        return new AppError(err.message, err.status, "BAD_REQUEST");
+    }
+
     // Sequelize wraps the original pg error in err.parent
     const dbError = err.parent ?? err;
 

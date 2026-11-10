@@ -8,12 +8,12 @@ const getById = (id) => {
     return User.findByPk(id);
 }
 
-const create = (user) => {
-    return User.create(user);
+const create = (userDto) => {
+    return User.create({...userDto});
 }
 
-const update = async (id, user) => {
-    const [count, rows] = await User.update(user, {where: {id}, returning: true});
+const update = async (id, userDto) => {
+    const [count, rows] = await User.update({...userDto}, {where: {id}, returning: true});
     return count > 0 ? rows[0] : null;
 }
 

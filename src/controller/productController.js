@@ -1,6 +1,7 @@
 const productService = require("../service/productService");
+const {ProductRequestDto} = require("../dto/ProductDto");
 
-// Express 5 forwards rejected promises to the error handler, so no try/catch is needed here
+// controllers only translate HTTP <-> DTOs; Express 5 forwards rejected promises to the error handler, so no try/catch is needed here
 
 const getAll = async (req, res) => {
     const products = await productService.getAll();
@@ -13,14 +14,12 @@ const getById = async (req, res) => {
 }
 
 const create = async (req, res) => {
-    const {name, description, quantity} = req.body;
-    const product = await productService.create({name, description, quantity});
+    const product = await productService.create(ProductRequestDto.fromRequest(req.body));
     res.status(201).json(product);
 }
 
 const update = async (req, res) => {
-    const {name, description, quantity} = req.body;
-    const product = await productService.update(req.params.id, {name, description, quantity});
+    const product = await productService.update(req.params.id, ProductRequestDto.fromRequest(req.body));
     res.status(200).json(product);
 }
 

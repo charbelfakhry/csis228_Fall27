@@ -13,7 +13,10 @@ const userBodyRules = [
     nameRule("lastName"),
     body("dob")
         .exists({values: "falsy"}).withMessage("dob is required")
-        .isISO8601({strict: true}).withMessage("dob must be a valid date (YYYY-MM-DD)")
+        // without this, isDate checks each element of an array, so ["2000-01-01"] would pass
+        .isString().withMessage("dob must be a valid date (YYYY-MM-DD)")
+        // isISO8601 would also accept "2020", "2020-05" or a full timestamp
+        .isDate({format: "YYYY-MM-DD", strictMode: true}).withMessage("dob must be a valid date (YYYY-MM-DD)")
         .custom((value) => new Date(value) < new Date()).withMessage("dob must be in the past")
 ];
 

@@ -1,5 +1,5 @@
 const {body} = require("express-validator");
-const {idRule} = require("./common");
+const {idRule, MAX_SAFE_INT} = require("./common");
 
 const productBodyRules = [
     body("name")
@@ -15,7 +15,9 @@ const productBodyRules = [
         .isLength({max: 500}).withMessage("description must be at most 500 characters"),
     body("quantity")
         .exists({values: "null"}).withMessage("quantity is required")
-        .isInt({min: 0}).withMessage("quantity must be a non-negative integer")
+        // without this, isInt checks each element of an array, so [1, 2] would pass
+        .not().isArray().withMessage("quantity must be a non-negative integer")
+        .isInt({min: 0, max: MAX_SAFE_INT}).withMessage("quantity must be a non-negative integer")
         .toInt()
 ];
 

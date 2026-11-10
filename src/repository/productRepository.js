@@ -8,12 +8,12 @@ const getById = (id) => {
     return Product.findByPk(id);
 }
 
-const create = (product) => {
-    return Product.create(product);
+const create = (productDto) => {
+    return Product.create({...productDto});
 }
 
-const update = async (id, product) => {
-    const [count, rows] = await Product.update(product, {where: {id}, returning: true});
+const update = async (id, productDto) => {
+    const [count, rows] = await Product.update({...productDto}, {where: {id}, returning: true});
     return count > 0 ? rows[0] : null;
 }
 

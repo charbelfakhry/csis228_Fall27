@@ -1,9 +1,12 @@
 const productRepository = require("../repository/productRepository");
 const {NotFoundError} = require("../errors/AppError");
+const {ProductResponseDto} = require("../dto/ProductDto");
 
 // business rules live here; "not found" is decided once instead of in every controller
-const getAll = () => {
-    return productRepository.getAll();
+// services take request DTOs and return response DTOs, so models never leave this layer
+const getAll = async () => {
+    const products = await productRepository.getAll();
+    return ProductResponseDto.fromModels(products);
 }
 
 const getById = async (id) => {
@@ -11,19 +14,20 @@ const getById = async (id) => {
     if(!product){
         throw new NotFoundError(`Product ${id} not found`);
     }
-    return product;
+    return ProductResponseDto.fromModel(product);
 }
 
-const create = (product) => {
-    return productRepository.create(product);
+const create = async (productDto) => {
+    const product = await productRepository.create(productDto);
+    return ProductResponseDto.fromModel(product);
 }
 
-const update = async (id, product) => {
-    const updated = await productRepository.update(id, product);
+const update = async (id, productDto) => {
+    const updated = await productRepository.update(id, productDto);
     if(!updated){
         throw new NotFoundError(`Product ${id} not found`);
     }
-    return updated;
+    return ProductResponseDto.fromModel(updated);
 }
 
 const remove = async (id) => {
