@@ -1,0 +1,14 @@
+<%- include('../partials/header') %>
+<h1><%= product.name %></h1>
+<p><%= product.description || 'No description' %></p>
+<p>In stock: <%= product.quantity %></p>
+
+<div class="actions">
+  <a class="button" href="/products/<%= product.id %>/edit">Edit</a>
+  <form method="POST" action="/products/<%= product.id %>/delete"
+        onsubmit="return confirm('Delete this product?')">
+    <button class="danger">Delete</button>
+  </form>
+</div>
+<p><a href="/products">Back to list</a></p>
+<%- include('../partials/footer') %>

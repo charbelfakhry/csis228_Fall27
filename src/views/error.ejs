@@ -1,0 +1,11 @@
+<%- include('partials/header') %>
+<h1><%= error.statusCode %>: <%= error.message %></h1>
+<% if (error.details) { %>
+  <ul>
+    <% [].concat(error.details).forEach((d) => { %>
+      <li><%= d.field ? d.field + ': ' + d.message : d %></li>
+    <% }) %>
+  </ul>
+<% } %>
+<a href="/">Home</a>
+<%- include('partials/footer') %>

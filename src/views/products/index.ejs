@@ -1,0 +1,18 @@
+<%- include('../partials/header') %>
+<h1>Products</h1>
+<p><a class="button" href="/products/new">+ New product</a></p>
+
+<% if (products.length === 0) { %>
+  <p>No products yet.</p>
+<% } else { %>
+  <table>
+    <tr><th>Name</th><th>Quantity</th></tr>
+    <% products.forEach((p) => { %>
+      <tr>
+        <td><a href="/products/<%= p.id %>"><%= p.name %></a></td>
+        <td><%= p.quantity %></td>
+      </tr>
+    <% }) %>
+  </table>
+<% } %>
+<%- include('../partials/footer') %>

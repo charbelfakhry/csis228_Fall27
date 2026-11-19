@@ -1,0 +1,13 @@
+<%- include('../partials/header') %>
+<h1><%= user.firstName %> <%= user.lastName %></h1>
+<p>Date of birth: <%= user.dob || 'Not set' %></p>
+
+<div class="actions">
+  <a class="button" href="/users/<%= user.id %>/edit">Edit</a>
+  <form method="POST" action="/users/<%= user.id %>/delete"
+        onsubmit="return confirm('Delete this user?')">
+    <button class="danger">Delete</button>
+  </form>
+</div>
+<p><a href="/users">Back to list</a></p>
+<%- include('../partials/footer') %>

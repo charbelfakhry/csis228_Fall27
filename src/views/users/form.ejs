@@ -1,0 +1,27 @@
+<%- include('../partials/header') %>
+<h1><%= title %></h1>
+
+<%# input names must match what userValidator and UserRequestDto read %>
+<form method="POST" action="<%= action %>" novalidate>
+  <label>First name
+    <input name="firstName" value="<%= values.firstName ?? '' %>">
+  </label>
+  <% if (errors.firstName) { %><p class="error"><%= errors.firstName.msg %></p><% } %>
+
+  <label>Last name
+    <input name="lastName" value="<%= values.lastName ?? '' %>">
+  </label>
+  <% if (errors.lastName) { %><p class="error"><%= errors.lastName.msg %></p><% } %>
+
+  <%# dob is a YYYY-MM-DD string, exactly the format <input type="date"> uses %>
+  <label>Date of birth
+    <input type="date" name="dob" value="<%= values.dob ?? '' %>">
+  </label>
+  <% if (errors.dob) { %><p class="error"><%= errors.dob.msg %></p><% } %>
+
+  <div class="actions">
+    <button>Save</button>
+    <a href="/users">Cancel</a>
+  </div>
+</form>
+<%- include('../partials/footer') %>

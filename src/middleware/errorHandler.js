@@ -62,6 +62,11 @@ const errorHandler = (err, req, res, next) =>{
         console.error(err);
     }
 
+    // pages get an HTML error page; /api keeps its JSON contract
+    if(!req.originalUrl.startsWith("/api")){
+        return res.status(error.statusCode).render("error", {title: "Error", error});
+    }
+
     res.status(error.statusCode).json({
         error: {
             code: error.code,

@@ -1,0 +1,26 @@
+<%- include('../partials/header') %>
+<h1><%= title %></h1>
+
+<%# input names must match what productValidator and ProductRequestDto read %>
+<form method="POST" action="<%= action %>" novalidate>
+  <label>Name
+    <input name="name" value="<%= values.name ?? '' %>">
+  </label>
+  <% if (errors.name) { %><p class="error"><%= errors.name.msg %></p><% } %>
+
+  <label>Description
+    <textarea name="description" rows="4"><%= values.description ?? '' %></textarea>
+  </label>
+  <% if (errors.description) { %><p class="error"><%= errors.description.msg %></p><% } %>
+
+  <label>Quantity
+    <input type="number" name="quantity" min="0" value="<%= values.quantity ?? '' %>">
+  </label>
+  <% if (errors.quantity) { %><p class="error"><%= errors.quantity.msg %></p><% } %>
+
+  <div class="actions">
+    <button>Save</button>
+    <a href="/products">Cancel</a>
+  </div>
+</form>
+<%- include('../partials/footer') %>
